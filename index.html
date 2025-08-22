@@ -3,61 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lentes VisionX - Moda y Estilo</title>
-  <link rel="stylesheet" href="style.css">
+  <title>LentiNova - Tienda de Gafas</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-    <div class="logo">👓 VisionX</div>
-    <nav class="nav-links">
-      <a href="#home">Inicio</a>
-      <a href="#catalogo">Catálogo</a>
-      <a href="#noticias">Noticias</a>
-      <a href="#carrito" id="cartBtn">🛒</a>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">👓 LentiNova</div>
+    <nav class="nav">
+      <ul>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#noticias">Noticias</a></li>
+        <li><a href="#" id="cart-btn">🛒 Carrito (<span id="cart-count">0</span>)</a></li>
+      </ul>
     </nav>
-    <button class="menu-toggle">☰</button>
   </header>
 
-  <!-- HERO -->
-  <section id="home" class="hero">
-    <h1>Tu estilo empieza en tu mirada</h1>
-    <p>Encuentra los lentes perfectos para cada ocasión.</p>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Descubre tu estilo con <span>gafas modernas</span></h1>
+    <p>Explora nuestra colección exclusiva para este año.</p>
     <a href="#catalogo" class="btn">Ver Catálogo</a>
   </section>
 
-  <!-- CATÁLOGO -->
+  <!-- Catálogo -->
   <section id="catalogo" class="catalogo">
     <h2>Catálogo de Lentes</h2>
-    <div class="filters">
-      <input type="text" id="searchInput" placeholder="Buscar lentes...">
-      <select id="categoryFilter">
-        <option value="all">Todas</option>
-        <option value="sol">Sol</option>
-        <option value="opticos">Ópticos</option>
-        <option value="deportivos">Deportivos</option>
-      </select>
+    <div class="productos" id="productos-lista">
+      <!-- Los productos se cargan dinámicamente desde JS -->
     </div>
-    <div class="product-grid" id="productGrid"></div>
   </section>
 
-  <!-- NOTICIAS -->
+  <!-- Noticias -->
   <section id="noticias" class="noticias">
     <h2>Noticias y Tendencias</h2>
     <article>
-      <h3>Lentes Polarizados 2025</h3>
-      <p>Los lentes polarizados vuelven con diseños modernos que combinan estilo y protección.</p>
+      <h3>Nueva colección 2025</h3>
+      <p>Descubre los lentes más innovadores que combinan tecnología y diseño minimalista.</p>
     </article>
     <article>
-      <h3>Moda Retro</h3>
-      <p>Las gafas redondas estilo vintage se posicionan como una de las tendencias más fuertes.</p>
+      <h3>Tips para cuidar tus gafas</h3>
+      <p>Mantén tus lentes como nuevos siguiendo nuestras recomendaciones de limpieza.</p>
     </article>
   </section>
 
-  <!-- CARRITO -->
-  <div class="carrito-modal" id="carritoModal">
+  <!-- Carrito -->
+  <div id="carrito-modal" class="carrito-modal">
     <div class="carrito-contenido">
       <h2>Tu Carrito</h2>
-      <ul id="carritoLista"></ul>
-      <p>Total: S/. <span id="carritoTotal">0.00</span></p>
-      <button id="vaciar
+      <ul id="carrito-lista"></ul>
+      <p>Total: S/ <span id="carrito-total">0.00</span></p>
+      <button id="vaciar-carrito">Vaciar</button>
+      <button id="cerrar-carrito">Cerrar</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 LentiNova - Tienda de Gafas</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

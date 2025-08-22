@@ -1,79 +1,53 @@
-// Productos simulados
+// Lista de productos (ejemplo de lentes)
 const PRODUCTS = [
-  { id: 1, name: "Lentes de Sol Urban", category: "sol", price: 120, img: "https://images.unsplash.com/photo-1591076482161-2a5b3722e2c1?auto=format&fit=crop&w=500&q=80" },
-  { id: 2, name: "Lentes Ópticos Elegance", category: "opticos", price: 200, img: "https://images.unsplash.com/photo-1591076482161-2a5b3722e2c1?auto=format&fit=crop&w=500&q=80" },
-  { id: 3, name: "Lentes Deportivos Runner", category: "deportivos", price: 150, img: "https://images.unsplash.com/photo-1622484211144-f1b2f871d3bc?auto=format&fit=crop&w=500&q=80" },
-  { id: 4, name: "Gafas Vintage Retro", category: "opticos", price: 180, img: "https://images.unsplash.com/photo-1583391733981-6f6e3c2e5f16?auto=format&fit=crop&w=500&q=80" }
+  { id: 1, nombre: "Lentes Clásicos", precio: 120.00, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" },
+  { id: 2, nombre: "Lentes Aviador", precio: 150.00, img: "https://images.unsplash.com/photo-1606813903276-63d31589c92f?auto=format&fit=crop&w=600&q=80" },
+  { id: 3, nombre: "Lentes Modernos", precio: 180.00, img: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80" },
+  { id: 4, nombre: "Lentes Vintage", precio: 200.00, img: "https://images.unsplash.com/photo-1551717743-49959800b1f9?auto=format&fit=crop&w=600&q=80" }
 ];
 
 let carrito = [];
 
-const productGrid = document.getElementById("productGrid");
-const searchInput = document.getElementById("searchInput");
-const categoryFilter = document.getElementById("categoryFilter");
-const carritoModal = document.getElementById("carritoModal");
-const carritoLista = document.getElementById("carritoLista");
-const carritoTotal = document.getElementById("carritoTotal");
+// Renderizar productos
+const contenedor = document.getElementById("productos-lista");
+PRODUCTS.forEach(prod => {
+  const div = document.createElement("div");
+  div.classList.add("card");
+  div.innerHTML = `
+    <img src="${prod.img}" alt="${prod.nombre}">
+    <h3>${prod.nombre}</h3>
+    <p>S/ ${prod.precio.toFixed(2)}</p>
+    <button onclick="agregarAlCarrito(${prod.id})">Agregar al carrito</button>
+  `;
+  contenedor.appendChild(div);
+});
 
-function renderProducts() {
-  const searchText = searchInput.value.toLowerCase();
-  const category = categoryFilter.value;
-  productGrid.innerHTML = "";
-
-  PRODUCTS.filter(p => 
-    (category === "all" || p.category === category) &&
-    p.name.toLowerCase().includes(searchText)
-  ).forEach(product => {
-    const div = document.createElement("div");
-    div.classList.add("product-card");
-    div.innerHTML = `
-      <img src="${product.img}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>S/. ${product.price}</p>
-      <button onclick="addToCart(${product.id})">Agregar</button>
-    `;
-    productGrid.appendChild(div);
-  });
+// Funciones carrito
+function agregarAlCarrito(id) {
+  const producto = PRODUCTS.find(p => p.id === id);
+  carrito.push(producto);
+  actualizarCarrito();
 }
 
-function addToCart(id) {
-  const product = PRODUCTS.find(p => p.id === id);
-  carrito.push(product);
-  updateCarrito();
-}
-
-function updateCarrito() {
-  carritoLista.innerHTML = "";
+function actualizarCarrito() {
+  const lista = document.getElementById("carrito-lista");
+  lista.innerHTML = "";
   let total = 0;
   carrito.forEach((item, index) => {
-    total += item.price;
+    total += item.precio;
     const li = document.createElement("li");
-    li.textContent = `${item.name} - S/. ${item.price}`;
-    carritoLista.appendChild(li);
+    li.textContent = `${item.nombre} - S/ ${item.precio.toFixed(2)}`;
+    lista.appendChild(li);
   });
-  carritoTotal.textContent = total.toFixed(2);
+  document.getElementById("carrito-total").textContent = total.toFixed(2);
+  document.getElementById("cart-count").textContent = carrito.length;
 }
 
-document.getElementById("cartBtn").addEventListener("click", () => {
-  carritoModal.style.display = "flex";
-});
-
-document.getElementById("cerrarCarrito").addEventListener("click", () => {
-  carritoModal.style.display = "none";
-});
-
-document.getElementById("vaciarCarrito").addEventListener("click", () => {
+// Modal carrito
+const modal = document.getElementById("carrito-modal");
+document.getElementById("cart-btn").addEventListener("click", () => modal.style.display = "flex");
+document.getElementById("cerrar-carrito").addEventListener("click", () => modal.style.display = "none");
+document.getElementById("vaciar-carrito").addEventListener("click", () => {
   carrito = [];
-  updateCarrito();
+  actualizarCarrito();
 });
-
-searchInput.addEventListener("input", renderProducts);
-categoryFilter.addEventListener("change", renderProducts);
-
-// Menu mobile
-document.querySelector(".menu-toggle").addEventListener("click", () => {
-  document.querySelector("header nav").classList.toggle("active");
-});
-
-// Inicializar
-renderProducts();
