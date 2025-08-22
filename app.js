@@ -1,93 +1,79 @@
+// Productos simulados
 const PRODUCTS = [
-  { id: 1, name: "Vestido Rosa", price: 50, category: "ropa", img: "https://picsum.photos/300/200?random=1" },
-  { id: 2, name: "Camisa Blanca", price: 35, category: "ropa", img: "https://picsum.photos/300/200?random=2" },
-  { id: 3, name: "Bolso Elegante", price: 70, category: "accesorios", img: "https://picsum.photos/300/200?random=3" },
-  { id: 4, name: "Zapatos Negros", price: 80, category: "ropa", img: "https://picsum.photos/300/200?random=4" },
-  { id: 5, name: "Collar Dorado", price: 25, category: "accesorios", img: "https://picsum.photos/300/200?random=5" }
+  { id: 1, name: "Lentes de Sol Urban", category: "sol", price: 120, img: "https://images.unsplash.com/photo-1591076482161-2a5b3722e2c1?auto=format&fit=crop&w=500&q=80" },
+  { id: 2, name: "Lentes Ópticos Elegance", category: "opticos", price: 200, img: "https://images.unsplash.com/photo-1591076482161-2a5b3722e2c1?auto=format&fit=crop&w=500&q=80" },
+  { id: 3, name: "Lentes Deportivos Runner", category: "deportivos", price: 150, img: "https://images.unsplash.com/photo-1622484211144-f1b2f871d3bc?auto=format&fit=crop&w=500&q=80" },
+  { id: 4, name: "Gafas Vintage Retro", category: "opticos", price: 180, img: "https://images.unsplash.com/photo-1583391733981-6f6e3c2e5f16?auto=format&fit=crop&w=500&q=80" }
 ];
 
 let carrito = [];
 
-const productosDiv = document.getElementById("productos");
-const searchInput = document.getElementById("search");
+const productGrid = document.getElementById("productGrid");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const carritoModal = document.getElementById("carritoModal");
+const carritoLista = document.getElementById("carritoLista");
+const carritoTotal = document.getElementById("carritoTotal");
 
-function mostrarProductos(lista) {
-  productosDiv.innerHTML = "";
-  lista.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <img src="${p.img}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <p>$${p.price}</p>
-      <button onclick="agregarCarrito(${p.id})">Agregar al carrito</button>
+function renderProducts() {
+  const searchText = searchInput.value.toLowerCase();
+  const category = categoryFilter.value;
+  productGrid.innerHTML = "";
+
+  PRODUCTS.filter(p => 
+    (category === "all" || p.category === category) &&
+    p.name.toLowerCase().includes(searchText)
+  ).forEach(product => {
+    const div = document.createElement("div");
+    div.classList.add("product-card");
+    div.innerHTML = `
+      <img src="${product.img}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>S/. ${product.price}</p>
+      <button onclick="addToCart(${product.id})">Agregar</button>
     `;
-    productosDiv.appendChild(card);
+    productGrid.appendChild(div);
   });
 }
-mostrarProductos(PRODUCTS);
 
-function filtrar(categoria) {
-  if (categoria === "all") {
-    mostrarProductos(PRODUCTS);
-  } else {
-    mostrarProductos(PRODUCTS.filter(p => p.category === categoria));
-  }
+function addToCart(id) {
+  const product = PRODUCTS.find(p => p.id === id);
+  carrito.push(product);
+  updateCarrito();
 }
 
-searchInput.addEventListener("input", e => {
-  const texto = e.target.value.toLowerCase();
-  const filtrados = PRODUCTS.filter(p => p.name.toLowerCase().includes(texto));
-  mostrarProductos(filtrados);
+function updateCarrito() {
+  carritoLista.innerHTML = "";
+  let total = 0;
+  carrito.forEach((item, index) => {
+    total += item.price;
+    const li = document.createElement("li");
+    li.textContent = `${item.name} - S/. ${item.price}`;
+    carritoLista.appendChild(li);
+  });
+  carritoTotal.textContent = total.toFixed(2);
+}
+
+document.getElementById("cartBtn").addEventListener("click", () => {
+  carritoModal.style.display = "flex";
 });
 
-function agregarCarrito(id) {
-  const producto = PRODUCTS.find(p => p.id === id);
-  const item = carrito.find(p => p.id === id);
-  if (item) {
-    item.cantidad++;
-  } else {
-    carrito.push({ ...producto, cantidad: 1 });
-  }
-  actualizarCarrito();
-}
+document.getElementById("cerrarCarrito").addEventListener("click", () => {
+  carritoModal.style.display = "none";
+});
 
-function actualizarCarrito() {
-  const cartItems = document.getElementById("cart-items");
-  const cartCount = document.getElementById("cart-count");
-  const cartTotal = document.getElementById("cart-total");
-  
-  cartItems.innerHTML = "";
-  let total = 0;
-  carrito.forEach(item => {
-    total += item.price * item.cantidad;
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.name} (x${item.cantidad}) - $${item.price * item.cantidad}
-      <button onclick="quitarItem(${item.id})">❌</button>
-    `;
-    cartItems.appendChild(li);
-  });
-  
-  cartCount.textContent = carrito.length;
-  cartTotal.textContent = total;
-}
-
-function quitarItem(id) {
-  carrito = carrito.filter(p => p.id !== id);
-  actualizarCarrito();
-}
-
-function vaciarCarrito() {
+document.getElementById("vaciarCarrito").addEventListener("click", () => {
   carrito = [];
-  actualizarCarrito();
-}
+  updateCarrito();
+});
 
-function toggleCarrito() {
-  document.getElementById("carrito-modal").style.display =
-    document.getElementById("carrito-modal").style.display === "block" ? "none" : "block";
-}
+searchInput.addEventListener("input", renderProducts);
+categoryFilter.addEventListener("change", renderProducts);
 
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("show");
-}
+// Menu mobile
+document.querySelector(".menu-toggle").addEventListener("click", () => {
+  document.querySelector("header nav").classList.toggle("active");
+});
+
+// Inicializar
+renderProducts();

@@ -3,65 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ModaNova - Tienda de Moda</title>
+  <title>Lentes VisionX - Moda y Estilo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
+  <!-- HEADER -->
   <header>
-    <div class="logo">ModaNova</div>
-    <nav class="nav-links" id="menu">
-      <a href="#catalogo">Catálogo123</a>
+    <div class="logo">👓 VisionX</div>
+    <nav class="nav-links">
+      <a href="#home">Inicio</a>
+      <a href="#catalogo">Catálogo</a>
       <a href="#noticias">Noticias</a>
-      <a href="#carrito" onclick="toggleCarrito()">Carrito 🛒 (<span id="cart-count">0</span>)</a>
+      <a href="#carrito" id="cartBtn">🛒</a>
     </nav>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <button class="menu-toggle">☰</button>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Nueva Colección 2025</h1>
-    <p>Descubre las últimas tendencias en moda</p>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <h1>Tu estilo empieza en tu mirada</h1>
+    <p>Encuentra los lentes perfectos para cada ocasión.</p>
     <a href="#catalogo" class="btn">Ver Catálogo</a>
   </section>
 
-  <!-- Catálogo -->
+  <!-- CATÁLOGO -->
   <section id="catalogo" class="catalogo">
-    <h2>Catálogo</h2>
-    <input type="text" id="search" placeholder="Buscar producto...">
+    <h2>Catálogo de Lentes</h2>
     <div class="filters">
-      <button onclick="filtrar('all')">Todo</button>
-      <button onclick="filtrar('ropa')">Ropa</button>
-      <button onclick="filtrar('accesorios')">Accesorios</button>
+      <input type="text" id="searchInput" placeholder="Buscar lentes...">
+      <select id="categoryFilter">
+        <option value="all">Todas</option>
+        <option value="sol">Sol</option>
+        <option value="opticos">Ópticos</option>
+        <option value="deportivos">Deportivos</option>
+      </select>
     </div>
-    <div id="productos" class="productos"></div>
+    <div class="product-grid" id="productGrid"></div>
   </section>
 
-  <!-- Noticias -->
+  <!-- NOTICIAS -->
   <section id="noticias" class="noticias">
     <h2>Noticias y Tendencias</h2>
     <article>
-      <h3>Colores de la temporada</h3>
-      <p>Los tonos pastel marcan tendencia este 2025...</p>
+      <h3>Lentes Polarizados 2025</h3>
+      <p>Los lentes polarizados vuelven con diseños modernos que combinan estilo y protección.</p>
     </article>
     <article>
-      <h3>Tips de moda</h3>
-      <p>Cómo combinar accesorios con tu outfit diario...</p>
+      <h3>Moda Retro</h3>
+      <p>Las gafas redondas estilo vintage se posicionan como una de las tendencias más fuertes.</p>
     </article>
   </section>
 
-  <!-- Carrito -->
-  <div id="carrito-modal" class="carrito-modal">
+  <!-- CARRITO -->
+  <div class="carrito-modal" id="carritoModal">
     <div class="carrito-contenido">
-      <span class="cerrar" onclick="toggleCarrito()">&times;</span>
-      <h2>Carrito de Compras</h2>
-      <ul id="cart-items"></ul>
-      <p>Total: $<span id="cart-total">0</span></p>
-      <button onclick="vaciarCarrito()">Vaciar Carrito</button>
-      <button>Pagar</button>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+      <h2>Tu Carrito</h2>
+      <ul id="carritoLista"></ul>
+      <p>Total: S/. <span id="carritoTotal">0.00</span></p>
+      <button id="vaciar
