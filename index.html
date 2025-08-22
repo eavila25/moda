@@ -1,355 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ModaNova · Tienda de Moda</title>
-  <meta name="description" content="Ejemplo de tienda de moda responsiva con catálogo, búsqueda, filtros, carrito y sección de noticias." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0b0c; --card:#111216; --muted:#9aa0a6; --text:#e9eaee; --primary:#7c3aed; --primary-2:#a78bfa; --accent:#22d3ee; --danger:#ef4444;
-      --radius:18px; --shadow:0 8px 24px rgba(0,0,0,.25);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0b0c, #12131a 40%, #0b0b0c);color:var(--text);}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block;border-radius:12px}
-    .container{width:min(1100px, 92%);margin-inline:auto}
-    header{position:sticky;top:0;z-index:50;background:rgba(11,11,12,.7);backdrop-filter:blur(10px);border-bottom:1px solid #1f2230}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
-    .brand{display:flex;gap:.6rem;align-items:center;font-weight:700;letter-spacing:.3px}
-    .brand .logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:0 6px 16px rgba(124,58,237,.45)}
-    .navlinks{display:flex;gap:1rem;align-items:center}
-    .navlinks a{padding:.55rem .85rem;border-radius:12px;color:var(--muted)}
-    .navlinks a.active,.navlinks a:hover{color:var(--text);background:#171824}
-    .btn{border:0;border-radius:14px;padding:.7rem 1rem;background:var(--primary);color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(124,58,237,.3)}
-    .btn.secondary{background:#1b1e2d;color:var(--text);box-shadow:none;border:1px solid #24283b}
-    .btn.ghost{background:transparent;border:1px solid #2a2e43}
-    .btn.danger{background:var(--danger)}
-    .menu-toggle{display:none;background:#171824;border:1px solid #23263a}
-
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center;padding:2.2rem 0 1.8rem}
-    .hero h1{font-size:clamp(1.8rem, 4vw, 3rem);line-height:1.08;margin:.2rem 0}
-    .hero p{color:var(--muted);max-width:45ch}
-    .hero .actions{display:flex;gap:.8rem;margin-top:1rem}
-    .hero-card{background:linear-gradient(180deg,#121426, #0f1020);border:1px solid #21243a;padding:1rem;border-radius:var(--radius);box-shadow:var(--shadow)}
-
-    /* Secciones */
-    section{padding:1.6rem 0}
-    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-    .section-title h2{margin:0;font-size:1.3rem}
-    .muted{color:var(--muted)}
-
-    /* Filtros */
-    .filters{display:flex;gap:.6rem;flex-wrap:wrap}
-    .chip{padding:.45rem .75rem;border-radius:999px;background:#171824;border:1px solid #21253a;color:var(--muted);cursor:pointer}
-    .chip.active{color:#fff;background:#232643;border-color:#31365a}
-    .search{flex:1;min-width:180px}
-    .search input{width:100%;padding:.7rem 1rem;border-radius:12px;border:1px solid #23263a;background:#121325;color:#eaeaf2}
-
-    /* Grid productos */
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
-    .product{grid-column:span 3;background:linear-gradient(180deg,#11121b,#0d0e17);border:1px solid #23263a;border-radius:18px;padding:.8rem;box-shadow:var(--shadow);display:flex;flex-direction:column}
-    .product .meta{display:flex;align-items:center;justify-content:space-between;margin-top:.6rem}
-    .price{font-weight:700}
-    .badge{font-size:.72rem;color:#a3a7bb;background:#1b1e30;border:1px solid #2a2e4a;padding:.25rem .45rem;border-radius:999px}
-    .product .title{font-weight:600;margin:.4rem 0}
-    .product button{margin-top:auto}
-
-    /* News */
-    .news{grid-column:span 6;background:linear-gradient(180deg,#11121b,#0d0e17);border:1px solid #23263a;border-radius:18px;padding:1rem;display:grid;gap:.6rem;grid-template-columns:1fr 1.4fr}
-    .news h3{margin:.2rem 0}
-
-    /* Carrito (modal) */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:1rem}
-    .modal.active{display:flex}
-    .modal-card{width:min(720px,95%);background:#0f101a;border:1px solid #242842;border-radius:20px;padding:1rem;box-shadow:var(--shadow)}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #23263a;padding-bottom:.6rem;margin-bottom:.8rem}
-    .cart-list{display:grid;gap:.6rem}
-    .cart-item{display:grid;grid-template-columns:56px 1fr auto auto;gap:.6rem;align-items:center;background:#121427;border:1px solid #24294a;border-radius:14px;padding:.5rem}
-    .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:10px}
-    .qty{display:flex;align-items:center;gap:.4rem}
-
-    footer{padding:2.2rem 0;color:var(--muted);border-top:1px solid #1f2230;margin-top:2rem}
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .hero{grid-template-columns:1fr}
-      .news{grid-template-columns:1fr}
-      .product{grid-column:span 6}
-    }
-    @media (max-width: 600px){
-      .navlinks{display:none}
-      .menu-toggle{display:inline-flex;align-items:center;gap:.5rem}
-      .mobile-menu{display:none;padding:.7rem;border-top:1px solid #1f2230}
-      .mobile-menu a{display:block;padding:.6rem;border-radius:12px;color:var(--muted)}
-      .mobile-menu a:hover{background:#171824;color:#fff}
-      .product{grid-column:span 12}
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModaNova - Tienda de Moda</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <div class="container nav">
-      <div class="brand"><span class="logo"></span> <span>ModaNova</span></div>
-      <nav class="navlinks" aria-label="Navegación principal">
-        <a href="#inicio" class="active">Inicio</a>
-        <a href="#tienda">Tienda</a>
-        <a href="#noticias">Noticias</a>
-        <a href="#" id="openCart" aria-label="Abrir carrito" class="btn secondary">Carrito <span id="cartCount" style="margin-left:.4rem;background:#232643;padding:.1rem .5rem;border-radius:999px">0</span></a>
-      </nav>
-      <button class="btn menu-toggle" id="menuBtn" aria-expanded="false">Menú</button>
-    </div>
-    <div class="container mobile-menu" id="mobileMenu">
-      <a href="#inicio">Inicio</a>
-      <a href="#tienda">Tienda</a>
+    <div class="logo">ModaNova</div>
+    <nav class="nav-links" id="menu">
+      <a href="#catalogo">Catálogo</a>
       <a href="#noticias">Noticias</a>
-      <a href="#" id="openCartMobile">Carrito ( <span id="cartCountMobile">0</span> )</a>
-    </div>
+      <a href="#carrito" onclick="toggleCarrito()">Carrito 🛒 (<span id="cart-count">0</span>)</a>
+    </nav>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   </header>
 
-  <main class="container">
-    <!-- Hero -->
-    <section id="inicio" class="hero">
-      <div>
-        <span class="badge">Nueva Colección · FW25</span>
-        <h1>Moda que se siente bien.<br/>Diseñada para tu día a día.</h1>
-        <p>Explora prendas sostenibles con cortes modernos. Compra en línea y recibe en 24–48h. Cambios gratis.</p>
-        <div class="actions">
-          <a class="btn" href="#tienda">Ver catálogo</a>
-          <a class="btn ghost" href="#noticias">Leer noticias</a>
-        </div>
-      </div>
-      <div class="hero-card">
-        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop" alt="Modelos vistiendo ropa moderna"/>
-      </div>
-    </section>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Nueva Colección 2025</h1>
+    <p>Descubre las últimas tendencias en moda</p>
+    <a href="#catalogo" class="btn">Ver Catálogo</a>
+  </section>
 
-    <!-- Tienda -->
-    <section id="tienda">
-      <div class="section-title">
-        <h2>Catálogo</h2>
-        <span class="muted">Envío gratis desde $60</span>
-      </div>
-      <div class="filters" role="group" aria-label="Filtros de categoría">
-        <button class="chip active" data-filter="all">Todo</button>
-        <button class="chip" data-filter="mujer">Mujer</button>
-        <button class="chip" data-filter="hombre">Hombre</button>
-        <button class="chip" data-filter="accesorios">Accesorios</button>
-        <div class="search"><label class="sr-only" for="q">Buscar</label><input id="q" placeholder="Buscar producto..." /></div>
-      </div>
-
-      <div class="grid" id="products">
-        <!-- Productos renderizados por JS -->
-      </div>
-    </section>
-
-    <!-- Noticias / Blog -->
-    <section id="noticias">
-      <div class="section-title">
-        <h2>Noticias & Tendencias</h2>
-        <a class="btn secondary" href="#">Ver todas</a>
-      </div>
-      <div class="grid">
-        <article class="news">
-          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop" alt="Pasarela de moda"/>
-          <div>
-            <span class="badge">Tendencias</span>
-            <h3>Colores que dominarán esta temporada</h3>
-            <p class="muted">Exploramos paletas vibrantes y neutros sofisticados para combinar en capas. Descubre cómo integrarlos en tu guardarropa.</p>
-            <a class="btn ghost" href="#">Leer artículo</a>
-          </div>
-        </article>
-        <article class="news">
-          <img src="https://images.unsplash.com/photo-1520975922190-2ae0c2d37d05?q=80&w=1600&auto=format&fit=crop" alt="Tela sostenible"/>
-          <div>
-            <span class="badge">Sostenibilidad</span>
-            <h3>Materiales reciclados, impacto real</h3>
-            <p class="muted">Nuestra línea Re:Wear reduce la huella ambiental con tejidos certificados. Conoce el proceso y certificados.</p>
-            <a class="btn ghost" href="#">Leer artículo</a>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer class="container">
-    <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:1rem">
-      <div style="grid-column:span 6">
-        <div class="brand"><span class="logo"></span><span>ModaNova</span></div>
-        <p class="muted">© <span id="year"></span> ModaNova. Todos los derechos reservados.</p>
-      </div>
-      <div style="grid-column:span 3">
-        <strong>Ayuda</strong>
-        <p class="muted">Envíos · Cambios · Soporte</p>
-      </div>
-      <div style="grid-column:span 3">
-        <strong>Newsletter</strong>
-        <p class="muted">Suscríbete para recibir novedades.</p>
-      </div>
+  <!-- Catálogo -->
+  <section id="catalogo" class="catalogo">
+    <h2>Catálogo</h2>
+    <input type="text" id="search" placeholder="Buscar producto...">
+    <div class="filters">
+      <button onclick="filtrar('all')">Todo</button>
+      <button onclick="filtrar('ropa')">Ropa</button>
+      <button onclick="filtrar('accesorios')">Accesorios</button>
     </div>
-  </footer>
+    <div id="productos" class="productos"></div>
+  </section>
 
-  <!-- Modal Carrito -->
-  <div class="modal" id="cartModal" role="dialog" aria-modal="true" aria-label="Carrito de compras">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Tu carrito</h3>
-        <button class="btn ghost" id="closeCart">Cerrar</button>
-      </div>
-      <div class="cart-list" id="cartList"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem">
-        <strong>Total: <span id="cartTotal">$0.00</span></strong>
-        <div>
-          <button class="btn secondary" id="clearCart">Vaciar</button>
-          <button class="btn" id="checkoutBtn">Pagar</button>
-        </div>
-      </div>
+  <!-- Noticias -->
+  <section id="noticias" class="noticias">
+    <h2>Noticias y Tendencias</h2>
+    <article>
+      <h3>Colores de la temporada</h3>
+      <p>Los tonos pastel marcan tendencia este 2025...</p>
+    </article>
+    <article>
+      <h3>Tips de moda</h3>
+      <p>Cómo combinar accesorios con tu outfit diario...</p>
+    </article>
+  </section>
+
+  <!-- Carrito -->
+  <div id="carrito-modal" class="carrito-modal">
+    <div class="carrito-contenido">
+      <span class="cerrar" onclick="toggleCarrito()">&times;</span>
+      <h2>Carrito de Compras</h2>
+      <ul id="cart-items"></ul>
+      <p>Total: $<span id="cart-total">0</span></p>
+      <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+      <button>Pagar</button>
     </div>
   </div>
 
-  <script>
-    // Datos de ejemplo
-    const PRODUCTS = [
-      {id:1,title:'Blazer Oversize',price:79.90,category:'mujer',img:'https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop'},
-      {id:2,title:'Jeans Relaxed',price:54.50,category:'hombre',img:'https://images.unsplash.com/photo-1518239232699-646f2f98c63e?q=80&w=1200&auto=format&fit=crop'},
-      {id:3,title:'Camisa Lino',price:49.00,category:'hombre',img:'https://images.unsplash.com/photo-1520975867597-0f1b7a7b5c83?q=80&w=1200&auto=format&fit=crop'},
-      {id:4,title:'Vestido Midi',price:64.00,category:'mujer',img:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop'},
-      {id:5,title:'Gorro Beanie',price:19.90,category:'accesorios',img:'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?q=80&w=1200&auto=format&fit=crop'},
-      {id:6,title:'Zapatillas Urban',price:89.00,category:'hombre',img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200&auto=format&fit=crop'},
-      {id:7,title:'Falda Satinada',price:44.00,category:'mujer',img:'https://images.unsplash.com/photo-1520975922190-2ae0c2d37d05?q=80&w=1200&auto=format&fit=crop'},
-      {id:8,title:'Mochila City',price:39.90,category:'accesorios',img:'https://images.unsplash.com/photo-1520975603845-9e0ce4a0a2d6?q=80&w=1200&auto=format&fit=crop'},
-    ];
-
-    const productsEl = document.getElementById('products');
-    const chips = document.querySelectorAll('.chip');
-    const searchInput = document.getElementById('q');
-    const cartModal = document.getElementById('cartModal');
-    const openCart = document.getElementById('openCart');
-    const openCartMobile = document.getElementById('openCartMobile');
-    const closeCart = document.getElementById('closeCart');
-    const clearCart = document.getElementById('clearCart');
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    const cartList = document.getElementById('cartList');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const cartCount = document.getElementById('cartCount');
-    const cartCountMobile = document.getElementById('cartCountMobile');
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    let cart = [];
-    let currentFilter = 'all';
-
-    const money = v => new Intl.NumberFormat('es-PE',{style:'currency',currency:'USD'}).format(v);
-
-    function renderProducts(){
-      const q = searchInput.value.toLowerCase().trim();
-      productsEl.innerHTML = '';
-      const filtered = PRODUCTS.filter(p => (currentFilter==='all'||p.category===currentFilter) && p.title.toLowerCase().includes(q));
-      if(!filtered.length){
-        productsEl.innerHTML = `<p class="muted" style="grid-column:1/-1">No se encontraron productos.</p>`;
-        return;
-      }
-      filtered.forEach(p=>{
-        const card = document.createElement('article');
-        card.className = 'product';
-        card.innerHTML = `
-          <img src="${p.img}" alt="${p.title}">
-          <div class="meta"><span class="badge">${p.category}</span><span class="price">${money(p.price)}</span></div>
-          <div class="title">${p.title}</div>
-          <button class="btn" data-id="${p.id}">Añadir al carrito</button>
-        `;
-        productsEl.appendChild(card);
-      });
-    }
-
-    function addToCart(id){
-      const prod = PRODUCTS.find(p=>p.id==id);
-      const item = cart.find(i=>i.id==id);
-      if(item){ item.qty++; } else { cart.push({...prod, qty:1}); }
-      updateCartUI();
-    }
-
-    function updateCartUI(){
-      cartList.innerHTML = '';
-      let total = 0;
-      cart.forEach(i=>{
-        total += i.price * i.qty;
-        const row = document.createElement('div');
-        row.className = 'cart-item';
-        row.innerHTML = `
-          <img src="${i.img}" alt="${i.title}">
-          <div>
-            <strong>${i.title}</strong><div class="muted">${money(i.price)} · ${i.category}</div>
-          </div>
-          <div class="qty">
-            <button class="btn ghost" data-act="dec" data-id="${i.id}">−</button>
-            <span>${i.qty}</span>
-            <button class="btn ghost" data-act="inc" data-id="${i.id}">+</button>
-          </div>
-          <button class="btn danger" data-act="del" data-id="${i.id}">Eliminar</button>
-        `;
-        cartList.appendChild(row);
-      });
-      cartTotalEl.textContent = money(total);
-      cartCount.textContent = cart.reduce((s,i)=>s+i.qty,0);
-      cartCountMobile.textContent = cartCount.textContent;
-    }
-
-    // Listeners
-    document.addEventListener('click', e=>{
-      const addBtn = e.target.closest('.product button');
-      if(addBtn){ addToCart(addBtn.dataset.id); }
-      const actBtn = e.target.closest('[data-act]');
-      if(actBtn){
-        const id = Number(actBtn.dataset.id);
-        const item = cart.find(i=>i.id===id);
-        if(!item) return;
-        const act = actBtn.dataset.act;
-        if(act==='inc') item.qty++;
-        if(act==='dec') item.qty = Math.max(1, item.qty-1);
-        if(act==='del') cart = cart.filter(i=>i.id!==id);
-        updateCartUI();
-      }
-    });
-
-    chips.forEach(c=>c.addEventListener('click',()=>{
-      chips.forEach(x=>x.classList.remove('active'));
-      c.classList.add('active');
-      currentFilter = c.dataset.filter;
-      renderProducts();
-    }));
-
-    searchInput.addEventListener('input', renderProducts);
-
-    function openCartModal(){ cartModal.classList.add('active'); }
-    function closeCartModal(){ cartModal.classList.remove('active'); }
-    openCart.addEventListener('click', (e)=>{e.preventDefault();openCartModal();});
-    openCartMobile.addEventListener('click', (e)=>{e.preventDefault();openCartModal();});
-    closeCart.addEventListener('click', closeCartModal);
-    clearCart.addEventListener('click', ()=>{ cart = []; updateCartUI(); });
-    checkoutBtn.addEventListener('click', ()=>{
-      if(!cart.length) return alert('Tu carrito está vacío.');
-      alert('¡Gracias por tu compra! (flujo de pago simulado)');
-      cart = []; updateCartUI(); closeCartModal();
-    });
-
-    // Mobile menu
-    menuBtn.addEventListener('click', ()=>{
-      const open = mobileMenu.style.display === 'block';
-      mobileMenu.style.display = open ? 'none' : 'block';
-      menuBtn.setAttribute('aria-expanded', String(!open));
-    });
-
-    // Init
-    document.getElementById('year').textContent = new Date().getFullYear();
-    renderProducts();
-    updateCartUI();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
