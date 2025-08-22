@@ -3,63 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LentiNova - Tienda de Gafas</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Tienda de Gafas - VisionStyle</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Header -->
   <header class="header">
-    <div class="logo">👓 LentiNova</div>
-    <nav class="nav">
-      <ul>
-        <li><a href="#catalogo">Catálogo</a></li>
-        <li><a href="#noticias">Noticias</a></li>
-        <li><a href="#" id="cart-btn">🛒 Carrito (<span id="cart-count">0</span>)</a></li>
-      </ul>
+    <div class="logo">VisionStyle</div>
+    <nav class="nav" id="nav">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#noticias">Noticias</a>
+      <a href="#contacto">Contacto</a>
     </nav>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
   </header>
 
   <!-- Hero -->
   <section class="hero">
-    <h1>Descubre tu estilo con <span>gafas modernas</span></h1>
-    <p>Explora nuestra colección exclusiva para este año.</p>
-    <a href="#catalogo" class="btn">Ver Catálogo</a>
+    <h1>Encuentra tu estilo</h1>
+    <p>Gafas modernas y elegantes para cada ocasión.</p>
+    <a href="#catalogo" class="btn">Explorar catálogo</a>
   </section>
 
   <!-- Catálogo -->
   <section id="catalogo" class="catalogo">
-    <h2>Catálogo de Lentes</h2>
-    <div class="productos" id="productos-lista">
-      <!-- Los productos se cargan dinámicamente desde JS -->
+    <h2>Nuestros Productos</h2>
+    <div class="grid">
+      <!-- Los productos se renderizan con JS -->
     </div>
   </section>
 
   <!-- Noticias -->
   <section id="noticias" class="noticias">
-    <h2>Noticias y Tendencias</h2>
+    <h2>Tendencias y Noticias</h2>
     <article>
-      <h3>Nueva colección 2025</h3>
-      <p>Descubre los lentes más innovadores que combinan tecnología y diseño minimalista.</p>
+      <h3>Los lentes retro vuelven con fuerza</h3>
+      <p>La moda vintage marca tendencia esta temporada con gafas retro que combinan estilo y personalidad.</p>
     </article>
     <article>
-      <h3>Tips para cuidar tus gafas</h3>
-      <p>Mantén tus lentes como nuevos siguiendo nuestras recomendaciones de limpieza.</p>
+      <h3>Protección UV y diseño</h3>
+      <p>Nuestros modelos incluyen la última tecnología en protección ocular sin sacrificar la estética.</p>
     </article>
   </section>
 
-  <!-- Carrito -->
-  <div id="carrito-modal" class="carrito-modal">
-    <div class="carrito-contenido">
-      <h2>Tu Carrito</h2>
-      <ul id="carrito-lista"></ul>
-      <p>Total: S/ <span id="carrito-total">0.00</span></p>
-      <button id="vaciar-carrito">Vaciar</button>
-      <button id="cerrar-carrito">Cerrar</button>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <p>© 2025 LentiNova - Tienda de Gafas</p>
+  <!-- Footer -->
+  <footer id="contacto" class="footer">
+    <p>© 2025 VisionStyle - Tu tienda de gafas online</p>
   </footer>
 
   <script src="script.js"></script>
